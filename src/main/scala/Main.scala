@@ -1,6 +1,6 @@
 import breeze.linalg.{DenseMatrix, DenseVector}
 
-object MainR extends App {
+object Main extends App {
 
   val minteFca = new MinteFca(DenseMatrix(
     (0, 1, 1, 0, 1, 1, 0, 1),
