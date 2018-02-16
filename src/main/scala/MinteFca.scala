@@ -8,12 +8,13 @@ class MinteFca(ctx: DenseMatrix[Int]){
                                 .zipWithIndex
                                 .filter(_._1 == 1).map(_._2)
 
-
   val n = ctx.cols
+  val Y = DenseVector(0,1,2,3,4,5,6,7)
+  val X = DenseVector(0,1,2,3,4)
 
   def print() = {
     println("Matrix: "+ctx)
-    println("Rows Sice: "+rows.size)
+    println("Rows Size: "+rows.size)
     println("n: "+n)
   }
 
@@ -55,13 +56,80 @@ class MinteFca(ctx: DenseMatrix[Int]){
       }
 
     }
-    D
+    //D
+    val dIndexes = D.toArray
+      .zipWithIndex
+      .filter(_._1 == 1).map(_._2)
+    DenseVector(dIndexes)
   }
 
   private def initInternalB(B: DenseVector[Int] ) : DenseVector[Int] = {
     val iB = DenseVector.zeros[Int](n)
     B.map{ m => iB(m) = 1 }
     iB
+  }
+
+  def generate_from (B : DenseVector[Int], y: Int): Unit = {
+    //1. process B (e.g., print B on screen);
+    println(s"generate_from B: $B and y: $y")
+    //2. if B = Y or y > n then
+    //3.    return
+    if (B == Y || y > n ) {
+      println("Returning due to condition: if B = Y or y > n ")
+    }
+    else {
+      //5. for j from y upto n do
+      for(j <- Range(y, n)) {
+        //6. if B[j] = 0 then
+        if (B(j) == 0) {
+          //7. set B[j] to 1 ;
+          B(j) = 1
+          //8. set D to compute closure(B, j);
+          val D = compute_closure(B, j)
+          //9. set skip to false;
+          var skip = false
+          //10. for k from 0 upto j −1 do
+          for(k <- Range(0, (j-1) )) {
+            breakable {
+              //11. if D[k] <> B[k] then
+              if (D(k) != B(k)) {
+                //12. set skip to true;
+                skip = true
+                //13. break for loop ;
+                break
+              }
+            }
+          }
+          //16. if skip = false then
+          if (!skip) {
+            //17. generate_from(D, j +1);
+            generate_from(D, j+1)
+          }
+          //19. set B[j] to 0 ;
+          B(j) = 0
+        }
+      }
+    }
+  }
+
+  def compute_galois(B : DenseVector[Int]) : DenseVector[Int] = {
+    val A = DenseVector[Int]()
+    val result = X.map{ x =>
+      var insert = true
+      B.foreach{ y =>
+        breakable {
+          if (ctx(x, y) == 0) {
+            insert = false
+            break
+          }
+        }
+      }
+      if (insert)
+        x
+      else
+        None
+    }.findAll( x1 => x1.isInstanceOf[Int]).toArray
+    DenseVector(result)
   }
 
 }
