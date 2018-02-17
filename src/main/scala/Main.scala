@@ -13,11 +13,12 @@ object Main extends App {
 
   //minteFca.print()
 
-  //val d = minteFca.compute_closure(DenseVector(1,5), 8)
+  //val d = minteFca.compute_closure(DenseVector(0,0,0,0,1,1,0,0), 7)
   //println(s"D: $d")
 
-  val A = minteFca.compute_galois(DenseVector(7))
-  println(s"A: $A")
+  val intents = minteFca.generate_from(DenseVector(0,0,0,0,0,0,0,0), 0)
 
-  //val intents = minteFca.generate_from(DenseVector(0,1,5,6), 0)
+  //val A = minteFca.compute_galois(DenseVector(0,1,2,3,4,5,6,7))
+  //println(s"A: $A")
+
 }

@@ -19,8 +19,8 @@ class MinteFca(ctx: DenseMatrix[Int]){
   }
 
   def compute_closure(B : DenseVector[Int], y: Int): DenseVector[Int] = {
-    println(s"Computing Closure with B: $B and y: $y")
-    val iB = initInternalB(B)
+    //println(s"Computing Closure with B: $B and y: $y")
+    val iB = B//initInternalB(B)
     // 1. for j from 0 upto n do
     // 2.  set D[j] to 1;
     val D = DenseVector.ones[Int](n)
@@ -44,7 +44,7 @@ class MinteFca(ctx: DenseMatrix[Int]){
       }
       //12. if match = true then
       if (iMatch) {
-        println(s"We have a match for Object $i")
+        //println(s"We have a match for Object $i")
         //13. for j from 0 upto n do
         for(j <- Range(0, n)) {
           //14. if context[i, j] = 0 then
@@ -54,13 +54,12 @@ class MinteFca(ctx: DenseMatrix[Int]){
           }
         }
       }
-
     }
-    //D
-    val dIndexes = D.toArray
-      .zipWithIndex
-      .filter(_._1 == 1).map(_._2)
-    DenseVector(dIndexes)
+    D
+    //val dIndexes = D.toArray
+    //  .zipWithIndex
+    //  .filter(_._1 == 1).map(_._2)
+    //DenseVector(dIndexes)
   }
 
   private def initInternalB(B: DenseVector[Int] ) : DenseVector[Int] = {
@@ -71,10 +70,10 @@ class MinteFca(ctx: DenseMatrix[Int]){
 
   def generate_from (B : DenseVector[Int], y: Int): Unit = {
     //1. process B (e.g., print B on screen);
-    println(s"generate_from B: $B and y: $y")
+    println(s"Intent B${y+1}: ${transformToIndexes(B)}")
     //2. if B = Y or y > n then
     //3.    return
-    if (B == Y || y > n ) {
+    if (B == initInternalB(Y) || y > n ) {
       println("Returning due to condition: if B = Y or y > n ")
     }
     else {
@@ -82,7 +81,7 @@ class MinteFca(ctx: DenseMatrix[Int]){
       for(j <- Range(y, n)) {
         //6. if B[j] = 0 then
         if (B(j) == 0) {
-          //7. set B[j] to 1 ;
+          //7. set B[j] to 1;
           B(j) = 1
           //8. set D to compute closure(B, j);
           val D = compute_closure(B, j)
@@ -130,6 +129,13 @@ class MinteFca(ctx: DenseMatrix[Int]){
         None
     }.findAll( x1 => x1.isInstanceOf[Int]).toArray
     DenseVector(result)
+  }
+
+  private def transformToIndexes(d: DenseVector[Int]) : DenseVector[Int] = {
+    val dIndexes = d.toArray
+      .zipWithIndex
+      .filter(_._1 == 1).map(_._2)
+    DenseVector(dIndexes)
   }
 
 }
