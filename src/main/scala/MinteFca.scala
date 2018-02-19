@@ -9,8 +9,8 @@ class MinteFca(ctx: DenseMatrix[Int]){
                                 .filter(_._1 == 1).map(_._2)
 
   val n = ctx.cols
-  val Y = DenseVector(0,1,2,3,4,5,6,7)
-  val X = DenseVector(0,1,2,3,4)
+  val Y = getY() //DenseVector(0,1,2,3,4,5,6,7)
+  val X = getX() //DenseVector(0,1,2,3,4)
 
   def print() = {
     println("Matrix: "+ctx)
@@ -112,7 +112,6 @@ class MinteFca(ctx: DenseMatrix[Int]){
   }
 
   def compute_galois(B : DenseVector[Int]) : DenseVector[Int] = {
-    val A = DenseVector[Int]()
     val result = X.map{ x =>
       var insert = true
       B.foreach{ y =>
@@ -136,6 +135,22 @@ class MinteFca(ctx: DenseMatrix[Int]){
       .zipWithIndex
       .filter(_._1 == 1).map(_._2)
     DenseVector(dIndexes)
+  }
+
+  private def getY() : DenseVector[Int] = {
+    val y = DenseVector.zeros[Int](ctx.cols)
+    for(k <- Range(0, ctx.cols)) {
+      y(k) = k
+    }
+    y
+  }
+
+  private def getX() : DenseVector[Int] = {
+    val x = DenseVector.zeros[Int](ctx.rows)
+    for(k <- Range(0, ctx.rows)) {
+      x(k) = k
+    }
+    x
   }
 
 }
