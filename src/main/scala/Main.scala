@@ -11,7 +11,7 @@ object Main extends App {
     (1, 1, 0, 0, 1, 1, 1, 1))) */
 
   //Example from Wikipedia
-  val minteFca = new MinteFca(DenseMatrix(
+  /*val minteFca = new MinteFca(DenseMatrix(
     (0, 1, 0, 0, 1, 0),
     (0, 1, 0, 0, 1, 0),
     (0, 0, 1, 1, 1, 1),
@@ -29,6 +29,18 @@ object Main extends App {
     (0, 0, 1, 1, 1, 0),
     (0, 1, 1, 0, 1, 0),
     (0, 1, 1, 0, 1, 0)))
+  */
+
+  //Paper sameAs
+  /*
+                              0                     1                 2                   3                     4
+                    tbox:prod->abox:binc  tbox:prod->abox:cinc  owl:sameAs->X  tbox:chem->abox:aspirin  rdf:type->Drug
+    0 abox:baspirin           1                     0                 1                   1                     1
+    1 abox:caspirin           0                     1                 1                   1                     1
+   */
+  val minteFca = new MinteFca(DenseMatrix(
+    (1, 0, 1, 1, 1),
+    (0, 1, 1, 1, 1)))
 
   //val emptyD = DenseVector()
 
@@ -39,9 +51,12 @@ object Main extends App {
 
   //println(s"X: ${minteFca.X} Y: ${minteFca.Y}")
 
-  val intents = minteFca.generate_from(DenseVector(0,0,0,0,0,0,0,0), 0)
+  //val intents = minteFca.generate_from(DenseVector(0,0,0,0,0,0,0,0), 0)
 
-  //val A = minteFca.compute_galois(DenseVector(0,1,2,3,4,5,6,7))
+  //val A = minteFca.compute_galois(DenseVector(1,2,3,4))
   //println(s"A: $A")
+
+  val results = minteFca.computeFca()
+  minteFca.printFca(results)
 
 }

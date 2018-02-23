@@ -1,4 +1,6 @@
 import breeze.linalg._
+
+import scala.collection.mutable.ListBuffer
 import util.control.Breaks._
 
 class MinteFca(ctx: DenseMatrix[Int]){
@@ -11,6 +13,8 @@ class MinteFca(ctx: DenseMatrix[Int]){
   val n = ctx.cols
   val Y = getY() //DenseVector(0,1,2,3,4,5,6,7)
   val X = getX() //DenseVector(0,1,2,3,4)
+
+  val intents = new ListBuffer[DenseVector[Int]]()
 
   def print() = {
     println("Matrix: "+ctx)
@@ -70,7 +74,8 @@ class MinteFca(ctx: DenseMatrix[Int]){
 
   def generate_from (B : DenseVector[Int], y: Int): Unit = {
     //1. process B (e.g., print B on screen);
-    println(s"Intent B${y+1}: ${transformToIndexes(B)}")
+    //println(s"Intent B${y+1}: ${transformToIndexes(B)}")
+    intents += B
     //2. if B = Y or y > n then
     //3.    return
     if (B == initInternalB(Y) || y > n ) {
@@ -151,6 +156,20 @@ class MinteFca(ctx: DenseMatrix[Int]){
       x(k) = k
     }
     x
+  }
+
+  def computeFca() : List[(DenseVector[Int],DenseVector[Int])] = {
+    this.generate_from(DenseVector(0,0,0,0,0,0,0,0), 0)
+    intents.map{ intent =>
+      val indexes = transformToIndexes(intent)
+      (compute_galois(indexes) , indexes)
+    }.toList.distinct
+  }
+
+  def printFca(values: List[(DenseVector[Int],DenseVector[Int])]) = {
+    values.map( r =>
+      println(r._1.toString.replace("DenseVector","").replace("(","{").replace(")","}")+","+r._2.toString.replace("DenseVector","").replace("(","{").replace(")","}"))
+    )
   }
 
 }
