@@ -1,12 +1,16 @@
-name := "fca"
+name := """play-scala-starter-example"""
 
-version := "0.1"
+version := "1.0-SNAPSHOT"
 
-scalaVersion := "2.12.4"
+lazy val root = (project in file(".")).enablePlugins(PlayScala)
 
-// https://mvnrepository.com/artifact/de.tu-dresden.inf.lat.fcalib/fcalib
-//libraryDependencies += "de.tu-dresden.inf.lat.fcalib" % "fcalib" % "0.11.0"
+resolvers += Resolver.sonatypeRepo("snapshots")
 
+scalaVersion := "2.12.7"
+
+crossScalaVersions := Seq("2.11.12", "2.12.7")
+
+libraryDependencies += guice
+libraryDependencies += "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2" % Test
+libraryDependencies += "com.h2database" % "h2" % "1.4.197"
 libraryDependencies += "org.scalanlp" %% "breeze" % "0.13.2"
-
-resolvers += "Sonatype Releases" at "https://oss.sonatype.org/content/repositories/releases/"

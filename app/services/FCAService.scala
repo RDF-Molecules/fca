@@ -1,14 +1,15 @@
+package services
 import breeze.linalg._
 
 import scala.collection.mutable.ListBuffer
 import util.control.Breaks._
 
-class MinteFca(ctx: DenseMatrix[Int]){
+class FCAService(ctx: DenseMatrix[Int]){
 
   val rows = for (i <- Range(0, ctx.cols))
-                yield ctx(::, i).toArray
-                                .zipWithIndex
-                                .filter(_._1 == 1).map(_._2)
+    yield ctx(::, i).toArray
+      .zipWithIndex
+      .filter(_._1 == 1).map(_._2)
 
   val n = ctx.cols
   val Y = getY() //DenseVector(0,1,2,3,4,5,6,7)
@@ -168,7 +169,9 @@ class MinteFca(ctx: DenseMatrix[Int]){
 
   def printFca(values: List[(DenseVector[Int],DenseVector[Int])]) = {
     values.map( r =>
-      println(r._1.toString.replace("DenseVector","").replace("(","{").replace(")","}")+","+r._2.toString.replace("DenseVector","").replace("(","{").replace(")","}"))
+      r._1.toString.replace("DenseVector","").replace("(","{").replace(")","}")+","
+        +
+      r._2.toString.replace("DenseVector","").replace("(","{").replace(")","}")
     )
   }
 
