@@ -1,5 +1,6 @@
 package services
 import breeze.linalg._
+import play.api.libs.json.{JsArray, JsString, JsValue, Json}
 
 import scala.collection.mutable.ListBuffer
 import util.control.Breaks._
@@ -172,6 +173,15 @@ class FCAService(ctx: DenseMatrix[Int]){
       r._1.toString.replace("DenseVector","").replace("(","{").replace(")","}")+","
         +
       r._2.toString.replace("DenseVector","").replace("(","{").replace(")","}")
+    )
+  }
+
+  def resultsToJson(values: List[(DenseVector[Int], DenseVector[Int])]) = {
+    values.map(r =>
+      Json.obj(
+        "molecules" -> Json.toJson(r._1.toArray),
+        "properties" -> Json.toJson(r._2.toArray)
+      )
     )
   }
 

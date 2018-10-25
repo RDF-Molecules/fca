@@ -3,6 +3,7 @@ package controllers
 import breeze.linalg.DenseMatrix
 import javax.inject._
 import play.Logger
+import play.api.libs.json.Json
 import play.api.mvc._
 import services.FCAService
 
@@ -25,17 +26,8 @@ class FCAController @Inject()(cc: ControllerComponents) (implicit assetsFinder: 
     val fca = new FCAService(DenseMatrix(
       data(0),
       data(1)))
-    val results = fca.computeFca()
-    Ok(fca.printFca(results).toString)
-  }
-
-  def applyFCAtoMolecules = Action(parse.json) { request =>
-    val data = (request.body \ "data").as[Array[Array[Int]]]
-    val fca = new FCAService(DenseMatrix(
-      data(0),
-      data(1)))
-    val results = fca.computeFca()
-    Ok(fca.printFca(results).toString)
+    val results = fca.resultsToJson(fca.computeFca())
+    Ok(Json.toJson(results))
   }
 
 }
